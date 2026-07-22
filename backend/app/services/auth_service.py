@@ -15,6 +15,9 @@ class AuthService:
         if self.repo.get_by_email(data.email):
             raise ValueError("User alreay exists")
         
+        if self.repo.get_by_username(data.username):
+            raise ValueError("Username already exists")
+        
         user = User(
             username=data.username,
             email=data.email,

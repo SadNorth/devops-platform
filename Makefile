@@ -43,7 +43,7 @@ rebuild:
 	docker compose up -d
 
 logs:
-	docker compose logs -f backend
+	docker compose logs backend
 
 logs-all:
 	docker compose logs -f

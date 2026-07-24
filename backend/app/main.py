@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -13,14 +13,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 @app.get("/")
-
-# async def root():
-#    return {
-#        "status": "running",
-#        "service": "backend"
-#    }
-
 def root(db: Session = Depends(get_db)):
     version = db.execute(text("SELECT version()")).scalar()
 

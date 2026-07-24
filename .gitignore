@@ -5,6 +5,7 @@ backend/.env
 # Python
 __pycache__/
 *.pyc
+*.py[cod]
 venv/
 
 # IDE

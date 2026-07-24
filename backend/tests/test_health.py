@@ -1,2 +1,13 @@
-def test_example():
-    assert 1 + 1 == 2
+from app.main import app
+from fastapi.testclient import TestClient
+
+client = TestClient(app)
+
+
+def test_health():
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "status": "ok"
+    }

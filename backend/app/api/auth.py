@@ -1,14 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-
+from app.core.jwt import create_access_token
+from app.core.security import pwd_context
 from app.db.dependencies import get_db
+from app.models.user import User
+from app.schemas.auth import LoginRequest, TokenResponse
 from app.schemas.user import UserCreate, UserResponse
 from app.services.auth_service import AuthService
-from app.core.security import pwd_context
-
-from app.schemas.auth import LoginRequest, TokenResponse
-from app.core.jwt import create_access_token
-from app.models.user import User
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 

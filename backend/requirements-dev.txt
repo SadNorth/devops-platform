@@ -4,3 +4,5 @@ ruff
 pytest
 pytest-cov
 httpx
+
+ruff

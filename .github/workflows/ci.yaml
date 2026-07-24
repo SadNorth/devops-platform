@@ -36,7 +36,7 @@ jobs:
           REDIS_PORT: 6379
           JWT_SECRET: test-secret
         run: |
-          pytest -m pytest
+          python -m pytest
 
       - name: Build Docker image
         run: |

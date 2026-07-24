@@ -30,16 +30,14 @@ jobs:
           ruff check .
 
       - name: Run tests
+        env:
+          DATABASE_URL: postgresql://postgres:postgres:postgres@localhost:5432/devops
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          JWT_SECRET: test-secret
         run: |
-          pytest backend/tests
+          pytest -m pytest
 
       - name: Build Docker image
         run: |
           docker build -t devops-platform backend
-
-      - name: Create test environment
-        run: |
-          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/devops" >> backend/.env
-          echo "REDIS_HOST=localhost" >> backend/.env
-          echo "REDIS_PORT=6379" >> backend/.env
-          echo "JWT_SECRET=test-secret" >> backend/.env

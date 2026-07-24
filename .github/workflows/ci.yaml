@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test:
 
@@ -38,6 +42,18 @@ jobs:
         run: |
           python -m pytest
 
-      - name: Build Docker image
-        run: |
-          docker build -t devops-platform backend
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registy: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          push: true
+          tags: |
+            ghcr.io/sadnorth/devops-platform:latest
+            ghcr.io/sadnorth/devops-platform:${{ github.sha }}

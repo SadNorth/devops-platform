@@ -4,17 +4,21 @@ services:
 
     build:
       context: ./backend
+
     container_name: backend
+
+    env_file:
+      - ./backend/.env
+
+    volumes:
+      - ./backend:/app
 
     networks:
       - backend_network
 
     expose:
       - "8000"
-
-    volumes:
-      - ./backend:/app
-
+      
     depends_on:
       postgres:
         condition: service_healthy

@@ -2,8 +2,7 @@ services:
 
   backend:
 
-    build:
-      context: ./backend
+    image: ghcr.io/sadnorth/devops-platform:latest
 
     container_name: backend
 

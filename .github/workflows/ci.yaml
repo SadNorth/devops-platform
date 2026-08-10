@@ -65,3 +65,15 @@ jobs:
           tags: |
             ghcr.io/sadnorth/devops-platform:latest
             ghcr.io/sadnorth/devops-platform:${{ steps.vars.outputs.sha_short }}
+
+  test-runner:
+    
+    runs-on: self-hosted
+
+    steps:
+      - name: Test self-hosted runner
+        run: |
+          echo "Runner: $(hostname)"
+          echo "User: $(whoami)"
+          echo "OS:"
+          uname -a

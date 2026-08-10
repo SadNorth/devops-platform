@@ -1,3 +1,15 @@
+# Ansible vault
+*.retry
+
+# Ansible temporary files
+*.json
+
+# Molecule
+.molecule/
+
+# OS
+.DS_Store
+
 # Environment
 .env
 backend/.env

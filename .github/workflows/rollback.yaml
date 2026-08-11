@@ -27,6 +27,6 @@ jobs:
 
       - name: Run Ansible rollback
         run: |
-          cd HomeLab
+          cd HomeLab/ansible
           ansible-playbook playbooks/rollback.yml \
             -e image_tag=${{ inputs.image_tag }}

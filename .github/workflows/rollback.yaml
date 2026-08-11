@@ -20,8 +20,13 @@ jobs:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           path: HomeLab
 
+      - name: Debug workspace
+        run: |
+          pwd
+          find . -maxdepth 4 -type f | sort
+
       - name: Run Ansible rollback
         run: |
-          cd HomeLab/ansible
+          cd HomeLab
           ansible-playbook playbooks/rollback.yml \
             -e image_tag=${{ inputs.image_tag }}

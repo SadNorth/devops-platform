@@ -73,5 +73,5 @@ jobs:
       - name: Deploy application
         run: |
           cd ~/Projects/HomeLab/ansible
-          ansible-playbooks playbooks/deploy.yml \
+          ansible-playbook playbooks/deploy.yml \
             -e image_tag=${GITHUB_SHA::7}

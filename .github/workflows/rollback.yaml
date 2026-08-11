@@ -18,7 +18,6 @@ jobs:
         with:
           repository: SadNorth/HomeLab
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path: HomeLab
 
       - name: Debug workspace
         run: |
@@ -27,6 +26,5 @@ jobs:
 
       - name: Run Ansible rollback
         run: |
-          cd HomeLab/ansible
           ansible-playbook playbooks/rollback.yml \
             -e image_tag=${{ inputs.image_tag }}

@@ -21,10 +21,13 @@ jobs:
 
       - name: Debug workspace
         run: |
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
           pwd
-          find . -maxdepth 4 -type f | sort
+          ls -la
+          find . -maxdepth 2 -type f | sort
 
       - name: Run Ansible rollback
+        working-directory: ${{ github.workspace }}/ansible
         run: |
           ansible-playbook playbooks/rollback.yml \
             -e image_tag=${{ inputs.image_tag }}

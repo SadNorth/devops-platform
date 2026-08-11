@@ -1,0 +1,26 @@
+name: Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Docker image tag to rollback to"
+        required: true
+        type: string
+
+jobs:
+  rollback:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout HomeLab
+        uses: actions/checkout@v5
+        with:
+          repository: SadNorth/HomeLab
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Run Ansible rollback
+        run: |
+          cd HomeLab/ansible
+          ansible-playbook playbooks/rollback.yml \
+            -e image_tag=${{ inputs.image_tag }}

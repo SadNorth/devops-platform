@@ -85,4 +85,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh variable set LAST_KNOWN_GOOD_TAG \
+            --repo sadnorth/devops-platform \
             --body "${GITHUB_SHA::7}"

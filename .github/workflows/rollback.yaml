@@ -18,6 +18,7 @@ jobs:
         with:
           repository: SadNorth/HomeLab
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          clean: true
 
       - name: Debug workspace
         run: |

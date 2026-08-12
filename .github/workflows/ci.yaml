@@ -69,9 +69,20 @@ jobs:
     needs: test
     runs-on: self-hosted
 
+    permissions:
+      contents: read
+      actions: write
+
     steps:
       - name: Deploy Application
         run: |
           cd ~/Projects/HomeLab/ansible
           ansible-playbook playbooks/deploy.yml \
             -e image_tag=${GITHUB_SHA::7}
+
+      - name: Save last known good version
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh variable set LAST_KNOWN_GOOD_TAG \
+            --body "${GITHUB_SHA::7}"

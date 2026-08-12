@@ -2,11 +2,11 @@ name: Rollback
 
 on:
   workflow_dispatch:
-    inputs:
-      image_tag:
-        description: "Docker image tag to rollback to"
-        required: true
-        type: string
+#   inputs:
+#     image_tag:
+#       description: "Docker image tag to rollback to"
+#       required: true
+#       type: string
 
 jobs:
   rollback:
@@ -20,15 +20,25 @@ jobs:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           clean: true
 
-      - name: Debug workspace
+#     - name: Debug workspace
+#       run: |
+#         echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+#         pwd
+#         ls -la
+#         find . -maxdepth 2 -type f | sort
+
+      - name: Get last known good version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
-          pwd
-          ls -la
-          find . -maxdepth 2 -type f | sort
+          echo "LAST_KNOWN_GOOD_TAG=$(gh variable get LAST_KNOWN_GOOD_TAG)" >> "$GITHUB_ENV"
+          
+      - name: Show rollback version
+        run: |
+          echo "Rolling back to: $LAST_KNOWN_GOOD_TAG"
 
       - name: Run Ansible rollback
         working-directory: ${{ github.workspace }}/ansible
         run: |
           ansible-playbook playbooks/rollback.yml \
-            -e image_tag=${{ inputs.image_tag }}
+            -e image_tag="$LAST_KNOWN_GOOD_TAG"

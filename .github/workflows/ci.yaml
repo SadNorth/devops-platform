@@ -80,13 +80,17 @@ jobs:
           ansible-playbook playbooks/deploy.yml \
             -e image_tag=${GITHUB_SHA::7}
 
+#     - name: Save last known good version
+#       env:
+#         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       run: |
+#         gh variable set LAST_KNOWN_GOOD_TAG \
+#           --repo SadNorth/devops-platform \
+#           --body "${GITHUB_SHA::7}"
+
       - name: Save last known good version
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh variable set LAST_KNOWN_GOOD_TAG \
-            --repo SadNorth/devops-platform \
-            --body "${GITHUB_SHA::7}"
+          echo "${GITHUB_SHA::7}" > last_known_good
 
       - name: Upload last known good version
         uses: actions/upload-artifact@v4

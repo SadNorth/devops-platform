@@ -24,31 +24,25 @@ jobs:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           clean: true
       
-      - name: Get last successful CI run
+      - name: Get last known good version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh run list \
-            --repo SadNorth/devops-platform \
-            --workflow ci.yaml \
-            --status success \
-            --limit 1 \
-            --json databaseId \
-            --jq '.[0].databaseId' > run-id \
+          echo "LAST_KNOWN_GOOD_TAG=$(gh variable get LAST_KNOWN_GOOD_TAG)" >> "$GITHUB_ENV"
 
-      - name: Download last known good version
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh run download \
-            "$(cat run-id)" \
-            --repo SadNorth/devops-platform \
-            --name last_known_good \
-            --dir rollback-state
-        
-      - name: Read rollback version
-        run: |
-          echo "LAST_KNOWN_GOOD_TAG=$(cat rollback-state/last_known_good)" >> "$GITHUB_ENV"
+#     - name: Download last known good version
+#       env:
+#         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       run: |
+#         gh run download \
+#           "$(cat run-id)" \
+#           --repo SadNorth/devops-platform \
+#           --name last_known_good \
+#           --dir rollback-state
+#       
+#     - name: Read rollback version
+#       run: |
+#         echo "LAST_KNOWN_GOOD_TAG=$(cat rollback-state/last_known_good)" >> "$GITHUB_ENV"
 
 #     - name: Debug workspace
 #       run: |

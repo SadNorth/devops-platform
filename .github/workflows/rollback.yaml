@@ -12,6 +12,10 @@ jobs:
   rollback:
     runs-on: self-hosted
 
+    permissions:
+      actions: read
+      contents: read
+
     steps:
       - name: Checkout HomeLab
         uses: actions/checkout@v5
@@ -19,6 +23,32 @@ jobs:
           repository: SadNorth/HomeLab
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           clean: true
+      
+      - name: Get last successful CI run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh run list \
+            --repo SadNorth/devops-platform \
+            --workflow ci.yaml \
+            --status success \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId' > run-id \
+
+      - name: Download last known good version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh run download \
+            "$(cat run-id)" \
+            --repo SadNorth/devops-platform \
+            --name last_known_good \
+            --dir rollback-state
+        
+      - name: Read rollback version
+        run: |
+          echo "LAST_KNOWN_GOOD_TAG=$(cat rollback-state/last_known_good)" >> "$GITHUB_ENV"
 
 #     - name: Debug workspace
 #       run: |
@@ -26,12 +56,6 @@ jobs:
 #         pwd
 #         ls -la
 #         find . -maxdepth 2 -type f | sort
-
-      - name: Get last known good version
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "LAST_KNOWN_GOOD_TAG=$(gh variable get LAST_KNOWN_GOOD_TAG)" >> "$GITHUB_ENV"
           
       - name: Show rollback version
         run: |

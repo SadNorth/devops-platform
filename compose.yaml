@@ -2,7 +2,7 @@ services:
 
   backend:
 
-    image: ghcr.io/sadnorth/devops-platform:${IMAGE_TAG}
+    image: ghcr.io/SadNorth/devops-platform:${IMAGE_TAG}
 
     container_name: backend
 

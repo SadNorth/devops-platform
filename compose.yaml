@@ -125,7 +125,7 @@ services:
     restart: unless-stopped
 
   node-exporter:
-    image: prom/node-exporter:1.12.1
+    image: prom/node-exporter:latest
     container_name: node-exporter
 
     volumes:

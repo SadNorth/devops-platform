@@ -109,7 +109,7 @@ services:
 
     restart: unless-stopped
   prometheus:
-    image: prom/prometheus:3.14.0
+    image: prom/prometheus:latest
     container_name: prometheus
 
     ports:

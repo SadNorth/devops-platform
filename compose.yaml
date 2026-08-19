@@ -2,7 +2,7 @@ services:
 
   backend:
 
-    image: ghcr.io/SadNorth/devops-platform:${IMAGE_TAG}
+    image: ghcr.io/sadnorth/devops-platform:${IMAGE_TAG}
 
     container_name: backend
 
@@ -14,6 +14,7 @@ services:
 
     networks:
       - backend_network
+      - monitoring
 
     expose:
       - "8000"
@@ -41,7 +42,7 @@ services:
 
   postgres:
 
-    image: postgres:17
+    image: postgres:17.6
 
     container_name: postgres
 
@@ -69,7 +70,7 @@ services:
   
   redis:
 
-    image: redis:7-alpine
+    image: redis:7.4.7-alpine
 
     container_name: redis
 
@@ -107,11 +108,47 @@ services:
       - backend_network
 
     restart: unless-stopped
+  prometheus:
+    image: prom/prometheus:3.13.1
+    container_name: prometheus
+
+    ports:
+      - "9090:9090"
+    
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+
+    networks:
+      - monitoring
+
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:1.12.1
+    container_name: node-exporter
+
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+
+    networks:
+      - monitoring
+
+    restart: unless-stopped
 
 networks:
   backend_network:
     driver: bridge
+  monitoring:
 
 volumes:
 
   postgres_data:
+  prometheus_data:
